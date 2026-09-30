@@ -1,0 +1,281 @@
+@import "tailwindcss";
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-display: "Playfair Display", serif;
+  --font-body: "DM Sans", sans-serif;
+  --font-script: "Cormorant Garamond", serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-era-primary: var(--era-primary);
+  --color-era-surface: var(--era-surface);
+  --color-era-text: var(--era-text);
+  --color-era-muted: var(--era-muted);
+  --color-era-glow: var(--era-glow);
+  --color-era-accent: var(--era-accent);
+  --color-era-particle: var(--era-particle);
+
+  --color-ivory: var(--wte-ivory);
+  --color-charcoal: var(--wte-charcoal);
+  --color-taupe: var(--wte-taupe);
+  --color-rose: var(--wte-rose);
+  --color-burgundy: var(--wte-burgundy);
+}
+@keyframes floatBokeh {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+:root {
+  /* Wear The Eras brand palette */
+  --wte-ivory: #f7f5f0;
+  --wte-charcoal: #171717;
+  --wte-white: #ffffff;
+  --wte-taupe: #b7ada1;
+  --wte-rose: #c9a5a5;
+  --wte-burgundy: #6e2637;
+
+  --background: var(--wte-ivory);
+  --foreground: var(--wte-charcoal);
+  --muted: var(--wte-taupe);
+  --muted-foreground: color-mix(in srgb, var(--wte-charcoal) 70%, transparent);
+  --border: color-mix(in srgb, var(--wte-charcoal) 12%, transparent);
+  --card: var(--wte-white);
+  --card-foreground: var(--wte-charcoal);
+  --primary: var(--wte-charcoal);
+  --primary-foreground: var(--wte-ivory);
+  --accent: var(--wte-burgundy);
+  --accent-foreground: var(--wte-ivory);
+
+  /* Era theming defaults (overridden by useEraTheme on /era/$slug pages) */
+  --era-primary: var(--wte-charcoal);
+  --era-surface: var(--wte-ivory);
+  --era-text: var(--wte-charcoal);
+  --era-muted: var(--wte-taupe);
+  --era-glow: rgba(23, 23, 23, 0.12);
+  --era-accent: var(--wte-burgundy);
+  --era-particle: var(--wte-charcoal);
+  --era-navbar: rgba(247, 245, 240, 0.85);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html,
+  body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    cursor: auto;
+  }
+
+  @media (pointer: fine) {
+    body.has-custom-cursor,
+    body.has-custom-cursor * {
+      cursor: none !important;
+    }
+  }
+
+  ::selection {
+    background: var(--era-primary, #fff);
+    color: #000;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  .font-body {
+    font-family: var(--font-body);
+  }
+  .font-script {
+    font-family: var(--font-script);
+    font-style: italic;
+  }
+  .tracked {
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+  .tracked-tight {
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .noise-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: overlay;
+  }
+}
+
+/* Marquee */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 30s linear infinite;
+}
+
+/* Hero scene crossfade */
+@keyframes sceneCycle {
+  0%, 18% { opacity: 1; }
+  22%, 100% { opacity: 0; }
+}
+
+/* Drift for lyric fragments */
+@keyframes drift {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-22px) translateX(8px); }
+}
+
+/* Pulse downward indicator */
+@keyframes pulseDown {
+  0% { transform: translateY(-8px); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(8px); opacity: 0; }
+}
+
+/* Limited pulse */
+@keyframes limitedPulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--era-glow, rgba(255,255,255,0.4)); }
+  50% { box-shadow: 0 0 0 8px transparent; }
+}
+.limited-pulse {
+  animation: limitedPulse 2s ease-in-out infinite;
+}
+
+/* Star twinkle */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 1; }
+}
+
+/* Glitch lines for reputation */
+@keyframes glitchScan {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10%, 12% { opacity: 0.5; }
+  20% { transform: translateY(100vh); opacity: 0; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+/* Falling particles */
+@keyframes fall {
+  to { transform: translate3d(var(--drift,0px), 110vh, 0) rotate(360deg); }
+}
+
+/* Floating hearts */
+@keyframes floatUp {
+  0% { transform: translateY(110vh) scale(0.6); opacity: 0; }
+  10%, 80% { opacity: 0.8; }
+  100% { transform: translateY(-20vh) scale(1); opacity: 0; }
+}
+
+/* Fog drift */
+@keyframes fog {
+  0%, 100% { transform: translateX(-10%) translateY(0); }
+  50% { transform: translateX(10%) translateY(-20px); }
+}
+
+/* Confetti */
+@keyframes confetti {
+  0% { transform: translateY(-10vh) rotate(0); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* Typewriter cursor */
+@keyframes blink {
+  50% { opacity: 0; }
+}
+.typewriter-cursor::after {
+  content: "▍";
+  margin-left: 4px;
+  animation: blink 1s steps(1) infinite;
+}
+
+/* Hero scene gradient cycle - JS-controlled */
+.hero-scene {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.6s ease-in-out;
+}
+.hero-scene.active {
+  opacity: 1;
+}
+
+/* Era curtain enter */
+@keyframes curtainUp {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-100%); }
+}
+.era-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  animation: curtainUp 700ms cubic-bezier(0.7,0,0.3,1) forwards;
+}
+
+/* Slow gradient drift */
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.gradient-shift {
+  background-size: 200% 200%;
+  animation: gradientShift 18s ease infinite;
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 700ms ease, transform 700ms ease;
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
